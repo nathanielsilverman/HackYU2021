@@ -8,9 +8,8 @@ const peerServer = ExpressPeerServer(server, {
   debug: true,
 });
 const { v4: uuidV4 } = require('uuid')
-const translate = require('translate');
-
-
+// const translate = require('translate');
+const PythonShell = require('python-shell').PythonShell;
 
 app.use("/peerjs", peerServer);
 

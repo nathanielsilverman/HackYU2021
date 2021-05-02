@@ -10,7 +10,7 @@
   <script defer src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
   <script src="/socket.io/socket.io.js" defer></script>
   <script src="script.js" defer></script>
-  <!-- <script defer src="speechtext.js"></script> -->
+  <script src="translator.js" defer></script>
   <title>Document</title>
   <style>
     #video-grid {
@@ -125,95 +125,95 @@ a {
 
   <div id="video-grid"></div>
   <br>
-  <textarea id="result" cols="50px" rows="20px"></textarea>
+  <textarea id="result" class="translate" cols="50px" rows="20px"></textarea>
   <br>
    <div align="center">
     <button id="button">Start listening</button>
     <button onclick=saveTextAsFile(result.value)>Download</button>
+    <select required='true' id="lang" ="Choose a Language...">
+      <option value="Afrikaans">Afrikaans</option>
+      <option value="Albanian">Albanian</option>
+      <option value="Arabic">Arabic</option>
+      <option value="Armenian">Armenian</option>
+      <option value="Basque">Basque</option>
+      <option value="Bengali">Bengali</option>
+      <option value="Bulgarian">Bulgarian</option>
+      <option value="Catalan">Catalan</option>
+      <option value="Cambodian">Cambodian</option>
+      <option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
+      <option value="Croatian">Croatian</option>
+      <option value="Czech">Czech</option>
+      <option value="Danish">Danish</option>
+      <option value="Dutch">Dutch</option>
+      <option value="English" selected>English</option>
+      <option value="Estonian">Estonian</option>
+      <option value="Fiji">Fiji</option>
+      <option value="Finnish">Finnish</option>
+      <option value="French">French</option>
+      <option value="Georgian">Georgian</option>
+      <option value="German">German</option>
+      <option value="Greek">Greek</option>
+      <option value="Gujarati">Gujarati</option>
+      <option value="Hebrew">Hebrew</option>
+      <option value="Hindi">Hindi</option>
+      <option value="Hungarian">Hungarian</option>
+      <option value="Icelandic">Icelandic</option>
+      <option value="Indonesian">Indonesian</option>
+      <option value="Irish">Irish</option>
+      <option value="Italian">Italian</option>
+      <option value="Japanese">Japanese</option>
+      <option value="Javanese">Javanese</option>
+      <option value="Korean">Korean</option>
+      <option value="Latin">Latin</option>
+      <option value="Latvian">Latvian</option>
+      <option value="Lithuanian">Lithuanian</option>
+      <option value="Macedonian">Macedonian</option>
+      <option value="Malay">Malay</option>
+      <option value="Malayalam">Malayalam</option>
+      <option value="Maltese">Maltese</option>
+      <option value="Maori">Maori</option>
+      <option value="Marathi">Marathi</option>
+      <option value="Mongolian">Mongolian</option>
+      <option value="Nepali">Nepali</option>
+      <option value="Norwegian">Norwegian</option>
+      <option value="Persian">Persian</option>
+      <option value="Polish">Polish</option>
+      <option value="Portuguese">Portuguese</option>
+      <option value="Punjabi">Punjabi</option>
+      <option value="Quechua">Quechua</option>
+      <option value="Romanian">Romanian</option>
+      <option value="Russian">Russian</option>
+      <option value="Samoan">Samoan</option>
+      <option value="Serbian">Serbian</option>
+      <option value="Slovak">Slovak</option>
+      <option value="Slovenian">Slovenian</option>
+      <option value="Spanish">Spanish</option>
+      <option value="Swahili">Swahili</option>
+      <option value="Swedish ">Swedish </option>
+      <option value="Tamil">Tamil</option>
+      <option value="Tatar">Tatar</option>
+      <option value="Telugu">Telugu</option>
+      <option value="Thai">Thai</option>
+      <option value="Tibetan">Tibetan</option>
+      <option value="Tonga">Tonga</option>
+      <option value="Turkish">Turkish</option>
+      <option value="Ukrainian">Ukrainian</option>
+      <option value="Urdu">Urdu</option>
+      <option value="Uzbek">Uzbek</option>
+      <option value="Vietnamese">Vietnamese</option>
+      <option value="Welsh">Welsh</option>
+      <option value="Xhosa">Xhosa</option>
+    </select>
    </div> 
    <br>
   
-  <select required='true' id="lang" ="Choose a Language...">
-    <option value="none" selected disabled hidden>Choose a Language...</option>
-    <option value="Afrikaans">Afrikaans</option>
-    <option value="Albanian">Albanian</option>
-    <option value="Arabic">Arabic</option>
-    <option value="Armenian">Armenian</option>
-    <option value="Basque">Basque</option>
-    <option value="Bengali">Bengali</option>
-    <option value="Bulgarian">Bulgarian</option>
-    <option value="Catalan">Catalan</option>
-    <option value="Cambodian">Cambodian</option>
-    <option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
-    <option value="Croatian">Croatian</option>
-    <option value="Czech">Czech</option>
-    <option value="Danish">Danish</option>
-    <option value="Dutch">Dutch</option>
-    <option value="English">English</option>
-    <option value="Estonian">Estonian</option>
-    <option value="Fiji">Fiji</option>
-    <option value="Finnish">Finnish</option>
-    <option value="French">French</option>
-    <option value="Georgian">Georgian</option>
-    <option value="German">German</option>
-    <option value="Greek">Greek</option>
-    <option value="Gujarati">Gujarati</option>
-    <option value="Hebrew">Hebrew</option>
-    <option value="Hindi">Hindi</option>
-    <option value="Hungarian">Hungarian</option>
-    <option value="Icelandic">Icelandic</option>
-    <option value="Indonesian">Indonesian</option>
-    <option value="Irish">Irish</option>
-    <option value="Italian">Italian</option>
-    <option value="Japanese">Japanese</option>
-    <option value="Javanese">Javanese</option>
-    <option value="Korean">Korean</option>
-    <option value="Latin">Latin</option>
-    <option value="Latvian">Latvian</option>
-    <option value="Lithuanian">Lithuanian</option>
-    <option value="Macedonian">Macedonian</option>
-    <option value="Malay">Malay</option>
-    <option value="Malayalam">Malayalam</option>
-    <option value="Maltese">Maltese</option>
-    <option value="Maori">Maori</option>
-    <option value="Marathi">Marathi</option>
-    <option value="Mongolian">Mongolian</option>
-    <option value="Nepali">Nepali</option>
-    <option value="Norwegian">Norwegian</option>
-    <option value="Persian">Persian</option>
-    <option value="Polish">Polish</option>
-    <option value="Portuguese">Portuguese</option>
-    <option value="Punjabi">Punjabi</option>
-    <option value="Quechua">Quechua</option>
-    <option value="Romanian">Romanian</option>
-    <option value="Russian">Russian</option>
-    <option value="Samoan">Samoan</option>
-    <option value="Serbian">Serbian</option>
-    <option value="Slovak">Slovak</option>
-    <option value="Slovenian">Slovenian</option>
-    <option value="Spanish">Spanish</option>
-    <option value="Swahili">Swahili</option>
-    <option value="Swedish ">Swedish </option>
-    <option value="Tamil">Tamil</option>
-    <option value="Tatar">Tatar</option>
-    <option value="Telugu">Telugu</option>
-    <option value="Thai">Thai</option>
-    <option value="Tibetan">Tibetan</option>
-    <option value="Tonga">Tonga</option>
-    <option value="Turkish">Turkish</option>
-    <option value="Ukrainian">Ukrainian</option>
-    <option value="Urdu">Urdu</option>
-    <option value="Uzbek">Uzbek</option>
-    <option value="Vietnamese">Vietnamese</option>
-    <option value="Welsh">Welsh</option>
-    <option value="Xhosa">Xhosa</option>
-  </select>
 
   <script id='speechToText'>
     window.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById("button");
     const result = document.getElementById("result");
     const main = document.getElementsByTagName("main")[0];
+    const lang = document.getElementById("lang");
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     if (typeof SpeechRecognition === "undefined") {
       button.remove();
@@ -225,25 +225,25 @@ a {
       let listening = false;
       const recognition = new SpeechRecognition();
       const start = () => {
+        console.log("Speech Recognition starting")
         listening = true;
         recognition.start();
         button.textContent = "Stop listening";
-        main.classList.add("speaking");
+        // main.classList.add("speaking");
       };
       const stop = () => {
+        console.log("Speech Recognition ending")
         listening = false
         recognition.stop();
         button.textContent = "Start listening";
-        main.classList.remove("speaking");
+        // main.classList.remove("speaking");
+        console.log("translating.....")
+        trans(lang, result);
       };
       const onResult = event => {
         result.innerHTML = "";
         for (const res of event.results) {
           const text = document.createTextNode(res[0].transcript);
-          const lang = document.getElementById("lang");
-          // console.log(lang);
-          // var translated_text = await translate(text, {to: lang.value})
-          // result.append(translated_text);
           result.append(text);
         }
       };
@@ -261,7 +261,7 @@ a {
   function saveTextAsFile(textToWrite) {
     var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
     var downloadLink = document.createElement("a");
-    downloadLink.download = 'output.txt';
+    downloadLink.download = 'transcript.txt';
     downloadLink.innerHTML = "Download File";
     if (window.webkitURL != null) {
       downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
@@ -272,9 +272,54 @@ a {
       downloadLink.style.display = "none";
       document.body.appendChild(downloadLink);
     }
-  downloadLink.click();
+    downloadLink.click();
   }
 </script>
+
+  <script>
+    function trans(lang, result){}
+     const text = await translate(`${lang.value}`, `${result.value}`);
+        console.log(text);
+  }
+  </script>
+<!-- <script>
+  function trans(lang, textfield) {
+    let options = {
+      mode: 'text',
+      // pythonPath: ''
+      pythonOptions: ['-u'],
+      scriptPath: '../trans.py',
+      args: [`${lang.value}`, `${textfield.value}`]
+    };
+    PythonShell.run('trans.py', options, function(err, results) {
+      if (err) throw err;
+    
+      console.log('Translated string: %j', results);
+    });
+    return results;
+  }
+
+</script> -->
+  <!-- // async function trans(textfield) {
+  //   var text = textfield.value;
+  //   console.log(text)
+  //   console.log(lang.value)
+
+  //   var translatedtext = await translate(`${text}`, {to: `${language.value}`});
+  //   console.log("transleted text: :) " + translatedtext)
+  //   textfield.append(translatedtext);
+  // } -->
+  <!-- <script>
+  
+    // var spawn = require("child_process").spawn;
+    
+    // var process = spawn('python', ["../trans.py", lang.value, textfield.value]);
+    // var translated = process.stdout.on();
+    // const trans = {"language": `${lang.value}`, "text": `${textfield.value}`}
+    // const asJson = JSON.stringify(trans);
+  }
+</script> -->
+
 
 </body>
 </html>
