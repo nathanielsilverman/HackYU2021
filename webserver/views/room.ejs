@@ -14,11 +14,15 @@
   <title>Document</title>
   <style>
     #video-grid {
+      align-self: center;
+      padding-top: .50cm;
       display: grid;
       grid-template-columns: repeat(auto-fill, 250px);
       grid-auto-rows: 250px;
     }
     video {
+      border: #0d122b;
+      border-radius: .5cm;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -77,29 +81,34 @@ main.speaking {
 #result {
   color: #666;
   font-style: italic;
-  text-align: center;
+  text-align:justify;
 }
 #result .final {
   color: #0d122b;
   font-style: normal;
 }
 button {
+  align-self: center;
   font-size: 18px;
   font-weight: 200;
   padding: 1em;
-  width: 200px;
+  width: 250px;
   background: transparent;
   border: 4px solid #f22f46;
-  border-radius: 4px;
+  border-radius: .5cm;
   transition: all 0.4s ease 0s;
   cursor: pointer;
   color: #f22f46;
-  margin-bottom: 4em;
+  /* margin-bottom: 4em; */
 }
 button:hover,
 button:focus {
   background: #f22f46;
   color: #fff;
+}
+
+textarea {
+  border-radius: .25cm;
 }
 
 a {
@@ -112,60 +121,160 @@ a {
   </style>
 </head>
 <body>
+  
+
   <div id="video-grid"></div>
-  <!-- <textarea class="output" id="output"></textarea> -->
-  <button id="button">Start listening</button>
-      <div id="result"></div>
-      <p id="message" hidden aria-hidden="true">
-        Your browser doesn't support Speech Recognition. Sorry.
-      </p>
-  <script>
+  <br>
+  <textarea id="result" cols="50px" rows="20px"></textarea>
+  <br>
+   <div align="center">
+    <button id="button">Start listening</button>
+    <button onclick=saveTextAsFile(result.value)>Download</button>
+   </div> 
+   <br>
+  
+  <select required='true' id="lang" ="Choose a Language...">
+    <option value="none" selected disabled hidden>Choose a Language...</option>
+    <option value="Afrikaans">Afrikaans</option>
+    <option value="Albanian">Albanian</option>
+    <option value="Arabic">Arabic</option>
+    <option value="Armenian">Armenian</option>
+    <option value="Basque">Basque</option>
+    <option value="Bengali">Bengali</option>
+    <option value="Bulgarian">Bulgarian</option>
+    <option value="Catalan">Catalan</option>
+    <option value="Cambodian">Cambodian</option>
+    <option value="Chinese (Mandarin)">Chinese (Mandarin)</option>
+    <option value="Croatian">Croatian</option>
+    <option value="Czech">Czech</option>
+    <option value="Danish">Danish</option>
+    <option value="Dutch">Dutch</option>
+    <option value="English">English</option>
+    <option value="Estonian">Estonian</option>
+    <option value="Fiji">Fiji</option>
+    <option value="Finnish">Finnish</option>
+    <option value="French">French</option>
+    <option value="Georgian">Georgian</option>
+    <option value="German">German</option>
+    <option value="Greek">Greek</option>
+    <option value="Gujarati">Gujarati</option>
+    <option value="Hebrew">Hebrew</option>
+    <option value="Hindi">Hindi</option>
+    <option value="Hungarian">Hungarian</option>
+    <option value="Icelandic">Icelandic</option>
+    <option value="Indonesian">Indonesian</option>
+    <option value="Irish">Irish</option>
+    <option value="Italian">Italian</option>
+    <option value="Japanese">Japanese</option>
+    <option value="Javanese">Javanese</option>
+    <option value="Korean">Korean</option>
+    <option value="Latin">Latin</option>
+    <option value="Latvian">Latvian</option>
+    <option value="Lithuanian">Lithuanian</option>
+    <option value="Macedonian">Macedonian</option>
+    <option value="Malay">Malay</option>
+    <option value="Malayalam">Malayalam</option>
+    <option value="Maltese">Maltese</option>
+    <option value="Maori">Maori</option>
+    <option value="Marathi">Marathi</option>
+    <option value="Mongolian">Mongolian</option>
+    <option value="Nepali">Nepali</option>
+    <option value="Norwegian">Norwegian</option>
+    <option value="Persian">Persian</option>
+    <option value="Polish">Polish</option>
+    <option value="Portuguese">Portuguese</option>
+    <option value="Punjabi">Punjabi</option>
+    <option value="Quechua">Quechua</option>
+    <option value="Romanian">Romanian</option>
+    <option value="Russian">Russian</option>
+    <option value="Samoan">Samoan</option>
+    <option value="Serbian">Serbian</option>
+    <option value="Slovak">Slovak</option>
+    <option value="Slovenian">Slovenian</option>
+    <option value="Spanish">Spanish</option>
+    <option value="Swahili">Swahili</option>
+    <option value="Swedish ">Swedish </option>
+    <option value="Tamil">Tamil</option>
+    <option value="Tatar">Tatar</option>
+    <option value="Telugu">Telugu</option>
+    <option value="Thai">Thai</option>
+    <option value="Tibetan">Tibetan</option>
+    <option value="Tonga">Tonga</option>
+    <option value="Turkish">Turkish</option>
+    <option value="Ukrainian">Ukrainian</option>
+    <option value="Urdu">Urdu</option>
+    <option value="Uzbek">Uzbek</option>
+    <option value="Vietnamese">Vietnamese</option>
+    <option value="Welsh">Welsh</option>
+    <option value="Xhosa">Xhosa</option>
+  </select>
+
+  <script id='speechToText'>
     window.addEventListener("DOMContentLoaded", () => {
-      const button = document.getElementById("button");
-      const result = document.getElementById("result");
-      const main = document.getElementsByTagName("main")[0];
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-      if (typeof SpeechRecognition === "undefined") {
-        button.remove();
-        const message = document.getElementById("message");
-        message.removeAttribute("hidden");
-        message.setAttribute("aria-hidden", "false");
-      } 
-      else {
-        let listening = false;
-        const recognition = new SpeechRecognition();
-        const start = () => {
-          recognition.start();
-          button.textContent = "Stop listening";
-          main.classList.add("speaking");
-        };
-        const stop = () => {
-          recognition.stop();
-          button.textContent = "Start listening";
-          main.classList.remove("speaking");
-        };
-        const onResult = event => {
-          result.innerHTML = "";
-          for (const res of event.results) {
-            const text = document.createTextNode(res[0].transcript);
-            const p = document.createElement("p");
-            if (res.isFinal) {
-              p.classList.add("final");
-            }
-            p.appendChild(text);
-            result.appendChild(p);
-          }
-        };
-        recognition.continuous = true;
-        recognition.interimResults = true;
-        recognition.addEventListener("result", onResult)
-        button.addEventListener("click", () => {
-                listening ? stop() : start();
-                listening = !listening;
-        });
-      }  
-    }); 
-     
-    </script>
+    const button = document.getElementById("button");
+    const result = document.getElementById("result");
+    const main = document.getElementsByTagName("main")[0];
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (typeof SpeechRecognition === "undefined") {
+      button.remove();
+      const message = document.getElementById("message");
+      message.removeAttribute("hidden");
+      message.setAttribute("aria-hidden", "false");
+    } 
+    else {
+      let listening = false;
+      const recognition = new SpeechRecognition();
+      const start = () => {
+        listening = true;
+        recognition.start();
+        button.textContent = "Stop listening";
+        main.classList.add("speaking");
+      };
+      const stop = () => {
+        listening = false
+        recognition.stop();
+        button.textContent = "Start listening";
+        main.classList.remove("speaking");
+      };
+      const onResult = event => {
+        result.innerHTML = "";
+        for (const res of event.results) {
+          const text = document.createTextNode(res[0].transcript);
+          const lang = document.getElementById("lang");
+          // console.log(lang);
+          // var translated_text = await translate(text, {to: lang.value})
+          // result.append(translated_text);
+          result.append(text);
+        }
+      };
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.addEventListener("result", onResult)
+      button.addEventListener("click", () => {
+        listening ? stop() : start();
+      });
+    }  
+  }); 
+  </script>
+
+<script> 
+  function saveTextAsFile(textToWrite) {
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+    var downloadLink = document.createElement("a");
+    downloadLink.download = 'output.txt';
+    downloadLink.innerHTML = "Download File";
+    if (window.webkitURL != null) {
+      downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    }
+    else {
+      downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+      downloadLink.onclick = destroyClickedElement;
+      downloadLink.style.display = "none";
+      document.body.appendChild(downloadLink);
+    }
+  downloadLink.click();
+  }
+</script>
+
 </body>
 </html>
