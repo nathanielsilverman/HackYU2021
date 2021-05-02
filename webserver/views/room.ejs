@@ -7,10 +7,12 @@
   <script>
     const ROOM_ID = "<%= roomId %>"
   </script>
+
   <script defer src="https://unpkg.com/peerjs@1.2.0/dist/peerjs.min.js"></script>
+  <script type='text/javascript' src="Trans.js"></script>
+  <!-- <script type="module">import {Trans} from "Trans.js"; </script> -->
   <script src="/socket.io/socket.io.js" defer></script>
   <script src="script.js" defer></script>
-  <script src="translator.js" defer></script>
   <title>Document</title>
   <style>
     #video-grid {
@@ -125,7 +127,7 @@ a {
 
   <div id="video-grid"></div>
   <br>
-  <textarea id="result" class="translate" cols="50px" rows="20px"></textarea>
+  <textarea id="result" cols="50px" rows="20px"></textarea>
   <br>
    <div align="center">
     <button id="button">Start listening</button>
@@ -238,7 +240,11 @@ a {
         button.textContent = "Start listening";
         // main.classList.remove("speaking");
         console.log("translating.....")
-        trans(lang, result);
+        var translatedtext = Trans(result.value, { to: lang.value })//.then(text => {
+          console.log(translatedtext); // Hola mundo//
+       // });
+        // new Trans(result.value, lang.value);
+        // console.log(translatedtext);
       };
       const onResult = event => {
         result.innerHTML = "";
@@ -275,51 +281,6 @@ a {
     downloadLink.click();
   }
 </script>
-
-  <script>
-    function trans(lang, result){}
-     const text = await translate(`${lang.value}`, `${result.value}`);
-        console.log(text);
-  }
-  </script>
-<!-- <script>
-  function trans(lang, textfield) {
-    let options = {
-      mode: 'text',
-      // pythonPath: ''
-      pythonOptions: ['-u'],
-      scriptPath: '../trans.py',
-      args: [`${lang.value}`, `${textfield.value}`]
-    };
-    PythonShell.run('trans.py', options, function(err, results) {
-      if (err) throw err;
-    
-      console.log('Translated string: %j', results);
-    });
-    return results;
-  }
-
-</script> -->
-  <!-- // async function trans(textfield) {
-  //   var text = textfield.value;
-  //   console.log(text)
-  //   console.log(lang.value)
-
-  //   var translatedtext = await translate(`${text}`, {to: `${language.value}`});
-  //   console.log("transleted text: :) " + translatedtext)
-  //   textfield.append(translatedtext);
-  // } -->
-  <!-- <script>
-  
-    // var spawn = require("child_process").spawn;
-    
-    // var process = spawn('python', ["../trans.py", lang.value, textfield.value]);
-    // var translated = process.stdout.on();
-    // const trans = {"language": `${lang.value}`, "text": `${textfield.value}`}
-    // const asJson = JSON.stringify(trans);
-  }
-</script> -->
-
 
 </body>
 </html>

@@ -1,4 +1,3 @@
-const { spawn } = require('child_process');
 const express = require('express')
 const app = express()
 const server = require('http').Server(app)
@@ -8,10 +7,11 @@ const peerServer = ExpressPeerServer(server, {
   debug: true,
 });
 const { v4: uuidV4 } = require('uuid')
-// const translate = require('translate');
-const PythonShell = require('python-shell').PythonShell;
+const translate = require('translate');
+
 
 app.use("/peerjs", peerServer);
+app.use("/translate", translate)
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
