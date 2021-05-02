@@ -20,9 +20,9 @@ file_name = input("What file do you want this to be written to?")+".docx"
 # dest_lang = "english"
 # file_name = "file.docx"
 to_translate = 'I want to translate this text'
-time = 45
+current = 45
 start_time = datetime.datetime(100, 1, 1, 0, 0, 0)
-max_time = datetime.datetime(100, 1, 1, 0, 0, time)
+max_time = datetime.datetime(100, 1, 1, 0, 0, current)
 start = time.time()
 
 mydoc = docx.Document()
@@ -36,13 +36,17 @@ while bool:
             print("Talk")
             # audio_text = recognizer.record(source, duration=3)
             audio_text = recognizer.listen(source)
-            st = recognizer.recognize_google(audio_text)
-            array = st.split()
-            for i in range(len(array)):
-                if array[i] in d.keys():
-                    array[i] = d[array[i]]
-            s = " ".join(array)
-            print(type(s))
+            try:
+                st = recognizer.recognize_google(audio_text)
+                array = st.split()
+                for i in range(len(array)):
+                    if array[i] in d.keys():
+                        array[i] = d[array[i]]
+                s = " ".join(array)
+                print(type(s))
+            except Exception as e:
+                print("Error: " + str(e))
+
             print("Time over, thanks")
 
             try:
@@ -54,5 +58,5 @@ while bool:
             except:
                 print("Sorry, I did not get that")
     x = x + 1
-    if(x >= time):
+    if(x >= current):
         bool = False
