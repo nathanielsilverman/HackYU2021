@@ -1,4 +1,5 @@
 import time, socket, sys
+from speech_to_text import translate
 
 new_socket = socket.socket()
 host_name = socket.gethostname()
@@ -23,8 +24,10 @@ client = (conn.recv(1024)).decode()
 print(client + ' has connected.')
 
 conn.send(name.encode())
+
 while True:
-    message = input('Me : ')
+    # message = input('Me : ')
+    message = translate("french", "file.docx")
     conn.send(message.encode())
     message = conn.recv(1024)
     message = message.decode()
